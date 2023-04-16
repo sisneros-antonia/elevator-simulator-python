@@ -70,6 +70,7 @@ Data structure representing either a boarding or exit request of a passenger, wi
     - Elevators at different sides of the building
 - General program improvements
     - Implement changes in velocity for starting/stopping/opening/closing and waiting for passengers to load and unload
-    - Output statistics for multiple different inputs (different #'s of floors and elevators)
+    - Output statistics for multiple different inputs (different #'s of floors and elevators, different algorithms)
+    - Probably should have used a different data structure (such as PriorityQueue or heapq) to store elevator passengers that would allow for sorting based on priority so that different scheduling algorithms could be easily implemented
     - Better GUI (In general, but also specifically, showing passengers still waiting at floor until they're actually picked up by an elevator)
     - Probably better error handling
