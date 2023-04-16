@@ -6,6 +6,9 @@ Blustaq Pre-Interview Code Challenge - The Elevator
 This program simulates elevator scheduling in a building of any size with any number of elevators. Each elevator as well as the dispatcher and passenger generator each run on its own thread to simulate elevators running concurrently. The current approach uses a round-robin-like algorithm to assign jobs to elevators, and a First Come First Serve (FCFS) algorithm to process jobs. 
 
 
+![Elevator Simulation Gif](elevator.gif)
+
+
 ## Usage
     usage: main.py [-h] [-f FLOORS] [-e ELEVATORS]
     
