@@ -11,6 +11,21 @@ from Passenger import Passenger
 
 
 class Building:
+  """
+  Represents the entire building. 
+  
+  Holds the list of floors, elevators, and the elevator dispatcher and starts each
+  of their respective threads.  Also generates new passengers, and handles 
+  drawing the simulation with pygame.
+
+  Attributes:
+      floors: List of Floor objects.
+      elevators: List of Elevator objects.
+      pygame: Pygame controller.
+      screen: Screen object used by pygame.
+      elevator_dispatcher: ElevatorDispatcher instance.
+  """
+  
   def __init__(self, num_floors, num_elevators, pygame, screen):
     self.floors = []
     self.create_floors(num_floors)
@@ -21,37 +36,44 @@ class Building:
     self.elevator_dispatcher = ElevatorDispatcher(self.floors, self.elevators)
     self.elevator_dispatcher.run_thread()
 
-  def get_num_floors(self):
-    return self.num_floors
 
   def create_floors(self, num_floors):
+    """
+    Instantiates Floor objects and adds them to floors list
+    """
     for i in range(num_floors):
       self.floors.append(Floor(i))
 
   def create_elevators(self, num_elevators):
+    """
+    Instantiates Elevator objects, adds them to elevators list, and starts their threads
+    """
     for i in range(num_elevators):
       elevator = Elevator(i)
       self.elevators.append(elevator)
-
-      # start elevator's processing thread
       elevator.runThread()
 
   def run_thread(self):
+    """
+    Creates and starts primary thread to generate
+    """
     self.thread = threading.Thread(target=self.run, daemon=True)
     self.thread.start()
 
   def run(self):
-    # generate a new passenger every NEW_PASSENGER_TIMEOUT ms
+    """
+    Generates a new passenger every NEW_PASSENGER_TIMEOUT seconds
+    """
     while True:
       self.generate_passenger()
       time.sleep(config.NEW_PASSENGER_TIMEOUT)
 
-  '''
-  Generates a new passenger request with a random boarding floor, direction
-  (up or down button press), and exit floor based on the boarding floor and direction.
-  Adds a new Passenger to the boarding floor's Passenger queue.
-  '''
   def generate_passenger(self):
+    '''
+    Generates a new passenger request with a random boarding floor, direction
+    (up or down button press), and exit floor based on the boarding floor and direction.
+    Adds the new Passenger to the boarding floor's Passenger queue.
+    '''
     boarding_floor = random.randint(0, len(self.floors) - 1)
 
     ### create boarding request ###
@@ -82,15 +104,26 @@ class Building:
     self.floors[boarding_floor].passengers.append(new_passenger)
 
   def run_graphics_thread(self):
+    """
+    Creates and starts graphics thread
+    """
     self.graphics_thread = threading.Thread(target=self.run_graphics, daemon=True)
     self.graphics_thread.start()
 
   def run_graphics(self):
+    """
+    Draws screen every SINGLE_TIME_UNIT seconds
+    """
     while True:
       self.draw_screen()
       time.sleep(config.SINGLE_TIME_UNIT)
 
   def draw_screen(self):
+    """
+    Contains all of the pygame drawing logic.
+    Draws each floor and waiting passengers on that floor and 
+    each elevator and passengers assigned to that elevator.
+    """
     WHITE = (255, 255, 255)
     BLACK = (0, 0, 0)
     YELLOW = (255, 255, 0)
